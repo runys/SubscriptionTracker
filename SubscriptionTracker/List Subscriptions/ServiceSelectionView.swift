@@ -11,42 +11,60 @@ struct ServiceSelectionView: View {
     
     @Binding var selectedService: Service?
     
+    @Environment(\.dismiss) private var dismiss
+    
     var body: some View {
+        
         List {
-            
-            Section {
-                if let selectedService {
-                    Text(selectedService.name)
-                        .frame(maxWidth: .infinity)
-                } else {
-                    Text("Selected service")
-                        .frame(maxWidth: .infinity)
-                        .foregroundStyle(.secondary)
-                }
-            } header: {
-                Text("Selected service")
-            }
-            
             Section {
                 Picker(selection: $selectedService) {
-                    ForEach(Service.testData()) { service in
-                        Label(service.name, systemImage: service.category.symbolName())
-                            .tag(service)
+                    Section {
+                        ForEach(Service.testData()) { service in
+                            Label(service.name, systemImage: service.category.symbolName())
+                                .tag(service)
+                        }
                     }
                 } label: {
-                    //Text("Pick a service:")
+                    EmptyView()
                 }
+                
                 .pickerStyle(.inline)
+                
+                .onChange(of: selectedService) { _, _ in
+                    dismiss()
+                }
+                
             }
             
+            // TODO: Create the add new service view
             Section {
                 Button {
-                    //
+                    // Navigate to the add new service view
                 } label: {
                     Text("Add new service")
                 }
             }
         }
+        
     }
     
+}
+
+#Preview {
+    
+    @Previewable @State var selectedService: Service?
+    
+    ServiceSelectionView(selectedService: $selectedService)
+        
+        .overlay(alignment: .bottom) {
+            Text("\(selectedService?.name ?? "Select a service")")
+                .padding()
+                .background(
+                    RoundedRectangle(cornerRadius: 20)
+                        .foregroundStyle(.white)
+                        .shadow(color: .black.opacity(0.2), radius: 10)
+                )
+                .padding()
+                
+        }
 }

@@ -38,7 +38,6 @@ struct SubscriptionListView: View {
         }
         .sheet(isPresented: $showNewSubscriptionModal) {
             NewSubscriptionView()
-            //ServiceSelectionView()
         }
     }
 }

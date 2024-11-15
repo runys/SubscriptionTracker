@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct NewSubscriptionView: View {
+struct NewSubscriptionView1: View {
     
     @State var selectedService: Service?
     
@@ -18,16 +18,26 @@ struct NewSubscriptionView: View {
     }
 }
 
-struct NewSubscriptionView1: View {
+struct NewSubscriptionView: View {
     
-    @State var selectedFrequency: Frequency = .monthly
-    @State var price: Double = 0.0
-    @State var startDate: Date = .now
-    @State var isActive: Bool = true
+    @State private var selectedFrequency: Frequency = .monthly
+    @State private var price: Double = 0.0
+    @State private var startDate: Date = .now
+    
+    @State private var selectedService: Service?
+    
+    @State private var showServiceSelection: Bool = false
     
     var body: some View {
         NavigationStack {
             Form {
+                
+                Section("Select the service") {
+                    Button(selectedService == nil ? "Select service" : selectedService!.name) {
+                        showServiceSelection.toggle()
+                    }
+                }
+                
                 Section {
                     Picker(selection: $selectedFrequency) {
                         ForEach(Frequency.allCases) { frequency in
@@ -45,6 +55,11 @@ struct NewSubscriptionView1: View {
                 Text("Price")
                 Text("Start date")
             }
+            .navigationTitle("New Subscription")
+            
+            .sheet(isPresented: $showServiceSelection) {
+                ServiceSelectionView(selectedService: $selectedService)
+            }
             
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
@@ -58,4 +73,8 @@ struct NewSubscriptionView1: View {
             }
         }
     }
+}
+
+#Preview {
+    NewSubscriptionView()
 }
