@@ -31,26 +31,23 @@ struct NewSubscriptionView: View {
     var body: some View {
         NavigationStack {
             Form {
-                
+                /// Service selection
                 Section("Select the service") {
                     Button(selectedService == nil ? "Select service" : selectedService!.name) {
                         showServiceSelection.toggle()
                     }
                 }
                 
+                /// Frequency of the subscription
                 Section {
                     Picker(selection: $selectedFrequency) {
                         ForEach(Frequency.allCases) { frequency in
-                            HStack {
-                                Image(systemName: "circle")
-                                    .symbolVariant(selectedFrequency == frequency ? .fill : .none)
-                                Text(frequency.rawValue)
-                            }
+                            Text(frequency.rawValue)
                         }
-                    } label: { EmptyView() }
-                        .pickerStyle(.inline)
-                    
-                } header: { Text("Frequency") }
+                    } label: {
+                        Text("Frequency")
+                    }
+                }
                 
                 Text("Price")
                 Text("Start date")

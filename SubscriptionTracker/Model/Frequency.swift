@@ -13,7 +13,7 @@ enum Frequency: String, CaseIterable {
 }
 
 extension Frequency: Identifiable {
-    var id: String {
-        self.rawValue
+    var id: Frequency {
+        self
     }
 }
