@@ -54,8 +54,6 @@ struct SubscriptionRow: View {
     }
 }
 
-
-
 #Preview {
     SubscriptionListView(subscriptions: Subscription.testData())
 }

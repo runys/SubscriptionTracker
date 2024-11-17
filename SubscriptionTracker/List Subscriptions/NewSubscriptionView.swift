@@ -28,18 +28,25 @@ struct NewSubscriptionView: View {
     
     @State private var showServiceSelection: Bool = false
     
+    @State private var numberFormatter: NumberFormatter = {
+        var formatter = NumberFormatter()
+        formatter.numberStyle = .currency
+        return formatter
+    }()
+    
     var body: some View {
         NavigationStack {
             Form {
                 /// Service selection
-                Section("Select the service") {
+                Section {
                     Button(selectedService == nil ? "Select service" : selectedService!.name) {
                         showServiceSelection.toggle()
                     }
+                    .frame(maxWidth: .infinity)
                 }
                 
                 /// Frequency of the subscription
-                Section {
+                Section("Subscription Frequency") {
                     Picker(selection: $selectedFrequency) {
                         ForEach(Frequency.allCases) { frequency in
                             Text(frequency.rawValue)
@@ -49,8 +56,22 @@ struct NewSubscriptionView: View {
                     }
                 }
                 
-                Text("Price")
-                Text("Start date")
+                /// Subscription price
+                Section("Subscription Price") {
+                    HStack {
+                        Text("Price")
+                        TextField("Price", value: $price, formatter: numberFormatter)
+                            .multilineTextAlignment(.trailing)
+                            .keyboardType(.decimalPad)
+                    }
+                    
+                    //TODO: Add a currency selection
+                }
+                
+                /// Starting date
+                Section("Starting date") {
+                    DatePicker("Starting date", selection: $startDate, displayedComponents: .date)
+                }
             }
             .navigationTitle("New Subscription")
             
@@ -64,7 +85,7 @@ struct NewSubscriptionView: View {
                         // validate form
                         // create and close
                     } label: {
-                        Text("Done")
+                        Text("Add")
                     }
                 }
             }
